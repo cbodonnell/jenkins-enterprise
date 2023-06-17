@@ -31,10 +31,13 @@ values:
 	VERSION=$(VERSION) \
 	envsubst < values.yaml.tmpl > values.yaml
 
-deploy: deps values
+install: deps values
 	helm upgrade jenkins-enterprise jenkins/jenkins -i \
 	-n jenkins-enterprise --create-namespace \
 	-f values.yaml
+
+uninstall:
+	helm uninstall jenkins-enterprise -n jenkins-enterprise
 
 admin-password:
 	kubectl exec --namespace jenkins-enterprise -it svc/jenkins-enterprise -c jenkins -- /bin/cat /run/secrets/additional/chart-admin-password && echo

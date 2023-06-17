@@ -7,12 +7,15 @@ ifeq ($(VERSION),)
 	endif
 endif
 
+CHART_VERSION ?= 4.3.28
+
 deps:
 	helm repo add jenkins https://charts.jenkins.io
 	helm repo update
 
 download: deps
-	helm pull jenkins/jenkins --untar --untardir=jenkins --ov
+	helm pull jenkins/jenkins --version=$(CHART_VERSION)
+	tar -xvf jenkins-$(CHART_VERSION).tgz
 
 container:
 	docker build -t cheebz/jenkins:$(VERSION) .
